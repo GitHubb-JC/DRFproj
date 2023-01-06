@@ -7,8 +7,9 @@ from rest_framework.views import APIView
 from .models import Post
 from django.http import Http404
 from rest_framework import status
-from rest_framework import mixins, generics
+from rest_framework import mixins, generics, permissions
 from django.contrib.auth.models import User
+from .permissions import IsOwnerOrReadOnly
 
 ## 클래스형
 # DRF mixins
@@ -21,10 +22,19 @@ from django.contrib.auth.models import User
 class PostList(generics.ListCreateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    # DRF >> 이용자 권한 설정 클래스 제공
+    # 여기서는 InAuthenticatedOrReadOnly >> authenticated는 R C 가능 / 아니면 R only
+
+    def perform_create(self, serializer):
+        # post요청 >> perform_create() 오버라이딩
+        # instance save를 수정해준다
+        serializer.save(owner=self.request.user)
 
 class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
 class UserList(generics.ListAPIView):
     queryset = User.objects.all()

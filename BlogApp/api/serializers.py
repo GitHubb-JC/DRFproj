@@ -5,9 +5,14 @@ from django.contrib.auth.models import User
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
+        owner = serializers.ReadOnlyField(source='owner.username')
+        # ReadOnlyField >> 그냥 CharField(read_only=True)와 같음
+        # source를 통해 field 채울 내용을 정함
         fields = (
+            'id',
             'title',
             'content',
+            'owner',
         )
 
 class UserSerializer(serializers.ModelSerializer):
