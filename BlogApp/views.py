@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .api.serializers import PostSerializer, UserSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from rest_framework.pagination import PageNumberPagination
 # APIView 공통적인 함수 재사용 가능, DRY 정책을 따르도록 하는 강력한 패턴 제공
 from rest_framework.views import APIView
 from .models import Post
@@ -10,6 +11,17 @@ from rest_framework import status
 from rest_framework import mixins, generics, permissions, viewsets
 from django.contrib.auth.models import User
 from .permissions import IsOwnerOrReadOnly
+
+# pagination 설정
+class LargeResultsSetPagination(PageNumberPagination):
+    page_size = 100
+    page_size_query_param = 'page_size'
+    max_page_size = 1000
+
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 4
+    page_size_query_param = 'page_size'
+    max_page_size = 10
 
 ## 클래스형
 # DRF mixins
@@ -38,6 +50,9 @@ class PostViewSet(viewsets.ModelViewSet):
     #     snippet = self.get_object()
     #     return Response(snippet.highlighted)
 
+    # pagination 기준
+    pagination_class = StandardResultsSetPagination
+
     def perform_create(self, serializer):
         # 이전과 마찬가지로 post 요청시 작동될 perform_create()를 오버라이딩 해줘
         serializer.save(owner=self.request.user)
@@ -51,6 +66,8 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = UserSerializer
     # 다른 view를 작성했을 때 처럼 queryset과 serializer_class를 지정
     # 하지만 두 개의 클래스에 중복 지정해줄 필요는 없음
+
+
 
 ##############################################################################
 
