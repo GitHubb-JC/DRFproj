@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .api.serializers import PostSerializer
+from .api.serializers import PostSerializer, UserSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 # APIView 공통적인 함수 재사용 가능, DRY 정책을 따르도록 하는 강력한 패턴 제공
@@ -8,6 +8,7 @@ from .models import Post
 from django.http import Http404
 from rest_framework import status
 from rest_framework import mixins, generics
+from django.contrib.auth.models import User
 
 ## 클래스형
 # DRF mixins
@@ -24,6 +25,15 @@ class PostList(generics.ListCreateAPIView):
 class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+
+class UserList(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+class UserDetail(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
 
 ##########################################################
 
