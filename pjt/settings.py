@@ -39,6 +39,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'BlogApp',
     'rest_framework',
+    # DRF Authentication 이용
+    'rest_framework.authtoken',
+    'rest_auth',
+    # 회원가입에 이용
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'rest_auth.registration',
 ]
 
 MIDDLEWARE = [

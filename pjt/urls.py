@@ -19,6 +19,11 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('BlogApp.urls')),
-    path('api-auth/', include('rest_framework.urls')),
-    # 'api-auth/' << 이 녀석으로 페이지 상단 로그인/로그아웃 기능 사용가능하다.
+    # rest_auth 사용
+    path('rest-auth/', include('rest_auth.urls')),
+    path('rest-auth/registration/', include('rest_auth.registration.urls'))
+
+    # #rest_framework 사용
+    # path('api-auth/', include('rest_framework.urls')),
+    # # 'api-auth/' << 이 녀석으로 페이지 상단 로그인/로그아웃 기능 사용가능하다.
 ]
