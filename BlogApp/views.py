@@ -6,11 +6,13 @@ from rest_framework.pagination import PageNumberPagination
 # APIView 공통적인 함수 재사용 가능, DRY 정책을 따르도록 하는 강력한 패턴 제공
 from rest_framework.views import APIView
 from .models import Post
+from accounts.models import BlogUser
 from django.http import Http404
 from rest_framework import status
 from rest_framework import mixins, generics, permissions, viewsets
 from django.contrib.auth.models import User
 from .permissions import IsOwnerOrReadOnly
+from django.contrib.auth import get_user_model
 
 # pagination 설정
 class LargeResultsSetPagination(PageNumberPagination):
@@ -57,8 +59,10 @@ class PostViewSet(viewsets.ModelViewSet):
         # 이전과 마찬가지로 post 요청시 작동될 perform_create()를 오버라이딩 해줘
         serializer.save(owner=self.request.user)
 
-## ViewSets 사용
+# ViewSets 사용
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
+    User = get_user_model()
+
     # ReadOnlyModelViewSet >> 자동적으로 ReadOnly 수행
 
     # 해당 ViewSet은 자동적으로 list와 검색 기능을 수행

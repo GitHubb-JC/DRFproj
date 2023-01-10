@@ -21,7 +21,7 @@ urlpatterns = [
     path('api/', include('BlogApp.urls')),
     # rest_auth 사용
     path('rest-auth/', include('rest_auth.urls')),
-    path('rest-auth/registration/', include('rest_auth.registration.urls'))
+    path('rest-auth/registration/', include('rest_auth.registration.urls')),
 
     # #rest_framework 사용
     # path('api-auth/', include('rest_framework.urls')),
